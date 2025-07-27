@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conv3rt</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
+    <script type="module">
+        import init, { compress } from 'https://cdn.jsdelivr.net/npm/brotli-wasm@1.3.1/index.mjs';
+        window.brotli = { init, compress };
+    </script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Conv3rt</h1>
+            <p>A client-side file conversion tool</p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="convert">Image Convert</button>
+            <button class="tab-btn" data-tab="compress">File Compress</button>
+        </div>
+        
+        <main>
+            <div class="column" id="input-column">
+                <div class="upload-area" id="uploadArea">
+                    <p>Drag & drop a file here or click to select</p>
+                    <input type="file" id="fileInput" hidden>
+                </div>
+
+                <div class="options">
+                    <div class="tab-content active" id="convert-tab">
+                        <h2>Image Options</h2>
+                        <div class="option-group">
+                            <label for="format">Output Format</label>
+                            <select id="format">
+                                <option value="jpeg">JPEG</option>
+                                <option value="png">PNG</option>
+                                <option value="webp">WebP</option>
+                            </select>
+                        </div>
+                        <div class="option-group">
+                            <label for="quality">Quality <span id="qualityValue">90%</span></label>
+                            <input type="range" id="quality" min="0" max="100" value="90">
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="compress-tab">
+                        <h2>Compression Options</h2>
+                        <div class="option-group">
+                            <label for="compress-format">Format</label>
+                            <select id="compress-format">
+                                <option value="gz">Gzip (.gz)</option>
+                                <option value="br">Brotli (.br)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="column" id="output-column" style="display: none;">
+                <h2>Result</h2>
+                <div class="result-preview">
+                    <img id="resultImage" alt="Converted image preview">
+                    <p id="fileInfo"></p>
+                </div>
+                <div class="button-group">
+                    <button id="processBtn">Process</button>
+                    <button id="downloadBtn" disabled>Download</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer>
+        <p>Made by <a href="https://github.com/jaylikesbunda" target="_blank" rel="noopener noreferrer">Jay Candel</a></p>
+    </footer>
+    
+    <script src="script.js"></script>
+</body>
+</html>
