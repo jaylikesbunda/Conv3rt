@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const fileInfo = document.getElementById('fileInfo');
     const tabBtns = document.querySelectorAll('.tab-btn');
     const tabContents = document.querySelectorAll('.tab-content');
+    const container = document.querySelector('.container');
 
     // State
     let selectedFile = null;
@@ -65,7 +66,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     function processFile(file) {
         selectedFile = file;
-        outputColumn.style.display = 'flex';
         resultImage.style.display = 'none';
         downloadBtn.disabled = true;
 
@@ -80,6 +80,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         } else {
             fileInfo.textContent = `Ready to process ${file.name}`;
         }
+
+        handleProcess();
     }
 
     function resetState() {
@@ -87,6 +89,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         processedBlob = null;
         outputColumn.style.display = 'none';
         fileInput.value = '';
+        container.classList.add('centered');
     }
 
     async function handleProcess() {
@@ -97,6 +100,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         } else {
             await compressFile();
         }
+
+        outputColumn.style.display = 'flex';
+        container.classList.remove('centered');
     }
 
     function convertImage() {
@@ -119,6 +125,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                         processedBlob = blob;
                         updateFileInfo(selectedFile.size, blob.size, `Converted to ${format.toUpperCase()}`);
                         downloadBtn.disabled = false;
+                        resultImage.src = URL.createObjectURL(blob);
+                        resultImage.style.display = 'block';
                         resolve();
                     }, mimeType, quality);
                 };
@@ -187,4 +195,5 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Initial setup
     switchTab('convert');
+    container.classList.add('centered');
 });
